@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State" id="search">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+var resultado;
+var mostrar = [];
+let jsonResult = [];
+let search = document.getElementById('search')
+let listaAMostrar = document.querySelector('.suggestions')
+search.addEventListener('keyup', mostrarData)
+
+//trae los datos del json
+const traerData = async () => {
+    let response = await fetch(endpoint)
+    jsonResult = await response.json()
+    return jsonResult
+}
+//filtra los datos
+async function mostrarData(){
+  let re = new RegExp(search.value, 'i')
+  resultado = await traerData()
+  resulta = Array.from(resultado)
+  mostrar.length = 0;
+  resulta.forEach(resu => {
+    if(re.exec(resu.city) || re.exec(resu.state)){
+      mostrar.push(resu)
+    }
+  })
+  if(search.value.length >= 3){
+  agregarHTML(mostrar)
+  }
+}
+//agregando a la lista el array
+function agregarHTML(resultados){
+  limpiarHTML()
+  resultados.forEach( resu => {
+    let li = document.createElement('li')
+    let span = document.createElement('span')
+    span.textContent = `${resu.population}`
+    li.textContent = `${resu.city}, ${resu.state}`
+    li.appendChild(span)
+    listaAMostrar.appendChild(li)
+  })
+}
+
+function limpiarHTML(){
+  while(listaAMostrar.firstChild){
+    listaAMostrar.removeChild(listaAMostrar.firstChild)
+  }
+}
+</script>
+</body>
+</html>

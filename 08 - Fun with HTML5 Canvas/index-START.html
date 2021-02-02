@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<input type="color" id="color">
+ <input type="range" id="range" min="1" max="50" value="2" data-sizing="px">
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+
+const canvas = document.getElementById('draw')
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+
+//Devuelve un objeto que proporciona todos los métodos y propiedades para dibujar en el canvas.
+const ctx = canvas.getContext('2d');
+ctx.lineJoin = 'round';
+ctx.lineCap = 'round';
+var rango = 10;
+
+
+var color = '#0';
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+let direction = true;
+
+function draw(e) {
+  if (!isDrawing) return; // stop the fn from running when they are not moused down
+  ctx.lineWidth = rango;
+  ctx.strokeStyle = `${color}`;
+  ctx.beginPath();
+  // start from
+  ctx.moveTo(lastX, lastY);
+  // go to
+  ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.stroke();
+  [lastX, lastY] = [e.offsetX, e.offsetY];
+
+}
+
+canvas.addEventListener('mousedown', (e) => {
+  isDrawing = true;
+  [lastX, lastY] = [e.offsetX, e.offsetY];
+});
+
+
+let colorInput = document.getElementById('color')
+let range = document.getElementById('range')
+
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', () => isDrawing = false);
+canvas.addEventListener('mouseout', () => isDrawing = false);
+colorInput.addEventListener('change', asignarColor)
+range.addEventListener('change', cambiarRango)
+//AGREGANDO ESTILO A LOS TRAZOS
+
+function asignarColor(e){
+  color = e.srcElement.value
+}
+
+function cambiarRango(e){
+  rango = parseInt(e.srcElement.value)
+  console.log(rango)
+}
+
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
