@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+  <h1>Escribe el codigo secreto (gaston123)</h1>
+<script>
+  ( () => {
+    const secreto = "gaston123"
+    const arr = new Array()
+    var tiempo;
+    window.addEventListener('keyup', (e) => {
+    if(secreto[arr.length]===e.key){
+      arr.push(e.key)
+    }else{
+      arr.length = 0
+    }
+    if(arr.join('')===secreto){
+      cornify_add()
+      arr.length = 0
+    }
+
+  })
+  })()
+  
+
+  
+</script>
+</body>
+</html>
